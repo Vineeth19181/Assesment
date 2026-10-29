@@ -1,0 +1,7 @@
+@model ProviderFormViewModel
+<div asp-validation-summary="ModelOnly" class="validation"></div>
+<div class="form-grid">
+    <div><label asp-for="ProviderName"></label><input asp-for="ProviderName" /><span asp-validation-for="ProviderName" class="validation"></span></div>
+    <div><label asp-for="County"></label><input asp-for="County" /><span asp-validation-for="County" class="validation"></span></div>
+    <div><label asp-for="Status"></label><select asp-for="Status"><option>Active</option><option>Inactive</option><option>Pending</option></select></div>
+</div>

@@ -1,0 +1,10 @@
+@model ProviderFormViewModel
+@{
+    ViewData["Title"] = "Edit Provider";
+}
+<h1>Edit provider</h1>
+<form asp-action="Edit" method="post" class="card form-card">
+    <input asp-for="ProviderId" type="hidden" />
+    <partial name="_ProviderForm" model="Model" />
+    <div class="form-actions"><a class="button secondary" asp-action="Details" asp-route-id="@Model.ProviderId">Cancel</a><button class="button" type="submit">Save changes</button></div>
+</form>

@@ -1,0 +1,10 @@
+@model LicenseFormViewModel
+@{
+    ViewData["Title"] = "Edit License";
+}
+<h1>Edit license</h1>
+<form asp-action="Edit" method="post" class="card form-card">
+    <input asp-for="LicenseId" type="hidden" /><input asp-for="ProviderId" type="hidden" />
+    <partial name="_LicenseForm" model="Model" />
+    <div class="form-actions"><a class="button secondary" asp-controller="Providers" asp-action="Details" asp-route-id="@Model.ProviderId">Cancel</a><button class="button" type="submit">Save changes</button></div>
+</form>

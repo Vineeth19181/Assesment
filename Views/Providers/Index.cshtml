@@ -1,0 +1,50 @@
+@model ProviderListViewModel
+@{
+    ViewData["Title"] = "Providers";
+}
+<div class="page-heading">
+    <div>
+        <h1>Providers</h1>
+        <p class="muted">Standard views automatically exclude soft-deleted records.</p>
+    </div>
+    <div class="actions">
+        <a class="button secondary" asp-controller="Dashboard" asp-action="Index">View dashboard</a>
+        <a class="button" asp-action="Create">Add provider</a>
+    </div>
+</div>
+<form method="get" class="filters card">
+    <div>
+        <label for="search">Search</label>
+        <input id="search" name="search" value="@Model.Search" placeholder="Provider or county" />
+    </div>
+    <div>
+        <label for="status">Status</label>
+        <select id="status" name="status">
+            <option value="">All statuses</option>
+            @foreach (var item in new[] { "Active", "Inactive", "Pending" })
+            {
+                <option value="@item" selected="@(Model.Status == item ? "selected" : null)">@item</option>
+            }
+        </select>
+    </div>
+    <button class="button" type="submit">Filter</button>
+    <a class="button secondary" asp-action="Index">Reset</a>
+</form>
+<div class="card table-card">
+<table>
+    <thead><tr><th>Provider</th><th>County</th><th>Status</th><th>Licenses</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var provider in Model.Providers)
+    {
+        <tr>
+            <td><a asp-action="Details" asp-route-id="@provider.ProviderId">@provider.ProviderName</a></td>
+            <td>@provider.County</td>
+            <td><span class="badge">@provider.Status</span></td>
+            <td>@provider.Licenses.Count</td>
+            <td class="row-actions"><a asp-action="Edit" asp-route-id="@provider.ProviderId">Edit</a></td>
+        </tr>
+    }
+    </tbody>
+</table>
+@if (!Model.Providers.Any()) { <div class="empty">No active providers matched your filters.</div> }
+</div>

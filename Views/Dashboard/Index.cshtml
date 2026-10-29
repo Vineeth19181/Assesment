@@ -1,0 +1,23 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="page-heading"><div><h1>Provider & license dashboard</h1><p class="muted">Read-only operational insights backed by the same database queries as the application.</p></div><a class="button secondary" asp-controller="Providers" asp-action="Index">Manage providers</a></div>
+<div class="metrics">
+    <div class="metric card"><span>Active providers</span><strong>@Model.TotalActiveProviders</strong></div>
+    <div class="metric card"><span>Providers with active licenses</span><strong>@Model.ActiveProvidersWithActiveLicenses</strong></div>
+    <div class="metric card"><span>Providers with expired licenses</span><strong>@Model.ActiveProvidersWithExpiredLicenses</strong></div>
+    <div class="metric card"><span>Active licenses</span><strong>@Model.ActiveLicenses</strong></div>
+    <div class="metric card"><span>Expired licenses</span><strong>@Model.ExpiredLicenses</strong></div>
+</div>
+<div class="dashboard-grid">
+    <section class="card"><div class="section-heading"><h2>Providers by status</h2></div><div class="bars">
+        @foreach (var item in Model.ProvidersByStatus)
+        { <div class="bar-row"><span>@item.Status</span><div class="bar"><i style="width:@(Math.Min(100, item.Count * 25))%"></i></div><strong>@item.Count</strong></div> }
+    </div></section>
+    <section class="card"><div class="section-heading"><h2>Active providers with expired licenses</h2></div>
+        @if (!Model.ExpiredLicenseProviders.Any()) { <div class="empty">No active providers currently have expired licenses.</div> }
+        else { <table><thead><tr><th>Provider</th><th>County</th><th>Expired licenses</th></tr></thead><tbody>@foreach (var item in Model.ExpiredLicenseProviders) { <tr><td><a asp-controller="Providers" asp-action="Details" asp-route-id="@item.ProviderId">@item.ProviderName</a></td><td>@item.County</td><td>@item.ExpiredLicenseCount</td></tr> }</tbody></table> }
+    </section>
+</div>
+<div class="card callout"><strong>Soft-delete guarantee:</strong> standard EF queries use global filters for providers and licenses. Delete operations are converted to updates in <code>SaveChanges</code>, preserving audit history.</div>

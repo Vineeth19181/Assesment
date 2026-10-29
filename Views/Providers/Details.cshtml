@@ -1,0 +1,37 @@
+@model Provider
+@{
+    ViewData["Title"] = Model.ProviderName;
+}
+<div class="page-heading">
+    <div><h1>@Model.ProviderName</h1><p class="muted">@Model.County · <span class="badge">@Model.Status</span></p></div>
+    <div class="actions"><a class="button secondary" asp-action="Edit" asp-route-id="@Model.ProviderId">Edit provider</a><a class="button" asp-controller="Licenses" asp-action="Create" asp-route-providerId="@Model.ProviderId">Add license</a></div>
+</div>
+<div class="card details-grid">
+    <div><span class="label">Provider ID</span><strong>@Model.ProviderId</strong></div>
+    <div><span class="label">Created</span><strong>@Model.CreatedDate.ToLocalTime().ToString("g")</strong></div>
+    <div><span class="label">Updated</span><strong>@(Model.UpdatedDate?.ToLocalTime().ToString("g") ?? "—")</strong></div>
+    <div><span class="label">Soft deleted</span><strong>No</strong></div>
+</div>
+<div class="card table-card">
+    <div class="section-heading"><h2>Licenses</h2><span class="muted">@Model.Licenses.Count active records</span></div>
+    <table>
+        <thead><tr><th>Number</th><th>Status</th><th>Expiration</th><th>Validity</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var license in Model.Licenses.OrderBy(x => x.ExpirationDate))
+        {
+            <tr>
+                <td>@license.LicenseNumber</td><td>@license.LicenseStatus</td><td>@license.ExpirationDate.ToString("yyyy-MM-dd")</td>
+                <td>@(license.IsExpired ? "Expired" : "Valid")</td>
+                <td class="row-actions"><a asp-controller="Licenses" asp-action="Edit" asp-route-id="@license.LicenseId">Edit</a>
+                    <form asp-controller="Licenses" asp-action="Delete" method="post" class="inline-form"><input type="hidden" name="id" value="@license.LicenseId" /><input type="hidden" name="providerId" value="@Model.ProviderId" /><button class="link-button danger" type="submit">Delete</button></form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @if (!Model.Licenses.Any()) { <div class="empty">No licenses are currently visible for this provider.</div> }
+</div>
+<div class="danger-zone card">
+    <div><h2>Soft delete provider</h2><p class="muted">The provider will be hidden from normal views but retained in the database for audit/troubleshooting.</p></div>
+    <form asp-action="Delete" asp-route-id="@Model.ProviderId" method="post"><button class="button danger" type="submit" onclick="return confirm('Soft-delete this provider?')">Soft delete provider</button></form>
+</div>

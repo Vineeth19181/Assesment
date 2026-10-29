@@ -1,0 +1,7 @@
+@model LicenseFormViewModel
+<div asp-validation-summary="ModelOnly" class="validation"></div>
+<div class="form-grid">
+    <div><label asp-for="LicenseNumber"></label><input asp-for="LicenseNumber" /><span asp-validation-for="LicenseNumber" class="validation"></span></div>
+    <div><label asp-for="LicenseStatus"></label><select asp-for="LicenseStatus"><option>Active</option><option>Expired</option><option>Suspended</option></select></div>
+    <div><label asp-for="ExpirationDate"></label><input asp-for="ExpirationDate" type="date" /><span asp-validation-for="ExpirationDate" class="validation"></span></div>
+</div>
